@@ -624,188 +624,188 @@ Version 4.0 HI-TECH Software Intermediate Code
 {
 [e :U _I2C_Init ]
 [f ]
-"11
-[; ;comi2c.c: 11:     SSPSTATbits.SMP = 1;
+"10
+[; ;comi2c.c: 10:     SSPSTATbits.SMP = 1;
 [e = . . _SSPSTATbits 2 7 -> -> 1 `i `uc ]
-"12
-[; ;comi2c.c: 12:     SSPSTATbits.CKE = 0;
+"11
+[; ;comi2c.c: 11:     SSPSTATbits.CKE = 0;
 [e = . . _SSPSTATbits 2 6 -> -> 0 `i `uc ]
-"15
-[; ;comi2c.c: 15:     SSPCON1bits.SSPEN = 1;
+"14
+[; ;comi2c.c: 14:     SSPCON1bits.SSPEN = 1;
 [e = . . _SSPCON1bits 0 2 -> -> 1 `i `uc ]
-"16
-[; ;comi2c.c: 16:     SSPCON1bits.SSPM = 0b1000;
+"15
+[; ;comi2c.c: 15:     SSPCON1bits.SSPM = 0b1000;
 [e = . . _SSPCON1bits 0 0 -> -> 8 `i `uc ]
-"18
-[; ;comi2c.c: 18:     SSPCON2 = 0x00;
+"17
+[; ;comi2c.c: 17:     SSPCON2 = 0x00;
 [e = _SSPCON2 -> -> 0 `i `uc ]
-"20
-[; ;comi2c.c: 20:     SSPADD = 29;
+"19
+[; ;comi2c.c: 19:     SSPADD = 29;
 [e = _SSPADD -> -> 29 `i `uc ]
-"22
-[; ;comi2c.c: 22: };
+"21
+[; ;comi2c.c: 21: };
 [e :UE 367 ]
 }
-"24
-[; ;comi2c.c: 24: void I2C_Start(void){
+"23
+[; ;comi2c.c: 23: void I2C_Start(void){
 [v _I2C_Start `(v ~T0 @X0 1 ef ]
 {
 [e :U _I2C_Start ]
 [f ]
-"25
-[; ;comi2c.c: 25:     SSPCON2bits.SEN = 1;
+"24
+[; ;comi2c.c: 24:     SSPCON2bits.SEN = 1;
 [e = . . _SSPCON2bits 0 0 -> -> 1 `i `uc ]
-"26
-[; ;comi2c.c: 26:     while(SSPCON2bits.SEN == 1);
+"25
+[; ;comi2c.c: 25:     while(SSPCON2bits.SEN == 1);
 [e $U 369  ]
 [e :U 370 ]
 [e :U 369 ]
 [e $ == -> . . _SSPCON2bits 0 0 `i -> 1 `i 370  ]
 [e :U 371 ]
-"27
-[; ;comi2c.c: 27: };
+"26
+[; ;comi2c.c: 26: };
 [e :UE 368 ]
 }
-"29
-[; ;comi2c.c: 29: void I2C_Stop(void){
+"28
+[; ;comi2c.c: 28: void I2C_Stop(void){
 [v _I2C_Stop `(v ~T0 @X0 1 ef ]
 {
 [e :U _I2C_Stop ]
 [f ]
-"30
-[; ;comi2c.c: 30:     SSPCON2bits.PEN = 1;
+"29
+[; ;comi2c.c: 29:     SSPCON2bits.PEN = 1;
 [e = . . _SSPCON2bits 0 2 -> -> 1 `i `uc ]
-"31
-[; ;comi2c.c: 31:     while(SSPCON2bits.PEN == 1);
+"30
+[; ;comi2c.c: 30:     while(SSPCON2bits.PEN == 1);
 [e $U 373  ]
 [e :U 374 ]
 [e :U 373 ]
 [e $ == -> . . _SSPCON2bits 0 2 `i -> 1 `i 374  ]
 [e :U 375 ]
-"32
-[; ;comi2c.c: 32: };
+"31
+[; ;comi2c.c: 31: };
 [e :UE 372 ]
 }
-"34
-[; ;comi2c.c: 34: void I2C_Restart(void){
+"33
+[; ;comi2c.c: 33: void I2C_Restart(void){
 [v _I2C_Restart `(v ~T0 @X0 1 ef ]
 {
 [e :U _I2C_Restart ]
 [f ]
-"35
-[; ;comi2c.c: 35:     SSPCON2bits.RSEN = 1;
+"34
+[; ;comi2c.c: 34:     SSPCON2bits.RSEN = 1;
 [e = . . _SSPCON2bits 0 1 -> -> 1 `i `uc ]
-"36
-[; ;comi2c.c: 36:     while(SSPCON2bits.RSEN == 1);
+"35
+[; ;comi2c.c: 35:     while(SSPCON2bits.RSEN == 1);
 [e $U 377  ]
 [e :U 378 ]
 [e :U 377 ]
 [e $ == -> . . _SSPCON2bits 0 1 `i -> 1 `i 378  ]
 [e :U 379 ]
-"37
-[; ;comi2c.c: 37: };
+"36
+[; ;comi2c.c: 36: };
 [e :UE 376 ]
 }
-"39
-[; ;comi2c.c: 39: void I2C_Ack(void){
+"38
+[; ;comi2c.c: 38: void I2C_Ack(void){
 [v _I2C_Ack `(v ~T0 @X0 1 ef ]
 {
 [e :U _I2C_Ack ]
 [f ]
-"40
-[; ;comi2c.c: 40:     PIR1bits.SSPIF = 0;
+"39
+[; ;comi2c.c: 39:     PIR1bits.SSPIF = 0;
 [e = . . _PIR1bits 0 3 -> -> 0 `i `uc ]
-"41
-[; ;comi2c.c: 41:     SSPCON2bits.ACKDT = 0;
+"40
+[; ;comi2c.c: 40:     SSPCON2bits.ACKDT = 0;
 [e = . . _SSPCON2bits 0 5 -> -> 0 `i `uc ]
-"42
-[; ;comi2c.c: 42:     SSPCON2bits.ACKEN = 1;
+"41
+[; ;comi2c.c: 41:     SSPCON2bits.ACKEN = 1;
 [e = . . _SSPCON2bits 0 4 -> -> 1 `i `uc ]
-"43
-[; ;comi2c.c: 43:     while(PIR1bits.SSPIF == 0);
+"42
+[; ;comi2c.c: 42:     while(PIR1bits.SSPIF == 0);
 [e $U 381  ]
 [e :U 382 ]
 [e :U 381 ]
 [e $ == -> . . _PIR1bits 0 3 `i -> 0 `i 382  ]
 [e :U 383 ]
-"44
-[; ;comi2c.c: 44: };
+"43
+[; ;comi2c.c: 43: };
 [e :UE 380 ]
 }
-"46
-[; ;comi2c.c: 46: void I2C_Nack(void){
+"45
+[; ;comi2c.c: 45: void I2C_Nack(void){
 [v _I2C_Nack `(v ~T0 @X0 1 ef ]
 {
 [e :U _I2C_Nack ]
 [f ]
-"47
-[; ;comi2c.c: 47:     PIR1bits.SSPIF = 0;
+"46
+[; ;comi2c.c: 46:     PIR1bits.SSPIF = 0;
 [e = . . _PIR1bits 0 3 -> -> 0 `i `uc ]
-"48
-[; ;comi2c.c: 48:     SSPCON2bits.ACKDT = 1;
+"47
+[; ;comi2c.c: 47:     SSPCON2bits.ACKDT = 1;
 [e = . . _SSPCON2bits 0 5 -> -> 1 `i `uc ]
-"49
-[; ;comi2c.c: 49:     SSPCON2bits.ACKEN = 1;
+"48
+[; ;comi2c.c: 48:     SSPCON2bits.ACKEN = 1;
 [e = . . _SSPCON2bits 0 4 -> -> 1 `i `uc ]
-"50
-[; ;comi2c.c: 50:     while(PIR1bits.SSPIF == 0);
+"49
+[; ;comi2c.c: 49:     while(PIR1bits.SSPIF == 0);
 [e $U 385  ]
 [e :U 386 ]
 [e :U 385 ]
 [e $ == -> . . _PIR1bits 0 3 `i -> 0 `i 386  ]
 [e :U 387 ]
-"51
-[; ;comi2c.c: 51: };
+"50
+[; ;comi2c.c: 50: };
 [e :UE 384 ]
 }
-"53
-[; ;comi2c.c: 53: void I2C_Tx(char data){
+"52
+[; ;comi2c.c: 52: void I2C_Tx(char data){
 [v _I2C_Tx `(v ~T0 @X0 1 ef1`uc ]
 {
 [e :U _I2C_Tx ]
 [v _data `uc ~T0 @X0 1 r1 ]
 [f ]
-"54
-[; ;comi2c.c: 54:     PIR1bits.SSPIF = 0;
+"53
+[; ;comi2c.c: 53:     PIR1bits.SSPIF = 0;
 [e = . . _PIR1bits 0 3 -> -> 0 `i `uc ]
-"55
-[; ;comi2c.c: 55:     SSPBUF = data;
+"54
+[; ;comi2c.c: 54:     SSPBUF = data;
 [e = _SSPBUF -> _data `uc ]
-"56
-[; ;comi2c.c: 56:     while(PIR1bits.SSPIF == 0);
+"55
+[; ;comi2c.c: 55:     while(PIR1bits.SSPIF == 0);
 [e $U 389  ]
 [e :U 390 ]
 [e :U 389 ]
 [e $ == -> . . _PIR1bits 0 3 `i -> 0 `i 390  ]
 [e :U 391 ]
-"57
-[; ;comi2c.c: 57: };
+"56
+[; ;comi2c.c: 56: };
 [e :UE 388 ]
 }
-"59
-[; ;comi2c.c: 59: char I2C_Rx(void){
+"58
+[; ;comi2c.c: 58: char I2C_Rx(void){
 [v _I2C_Rx `(uc ~T0 @X0 1 ef ]
 {
 [e :U _I2C_Rx ]
 [f ]
-"60
-[; ;comi2c.c: 60:     PIR1bits.SSPIF = 0;
+"59
+[; ;comi2c.c: 59:     PIR1bits.SSPIF = 0;
 [e = . . _PIR1bits 0 3 -> -> 0 `i `uc ]
-"61
-[; ;comi2c.c: 61:     SSPCON2bits.RCEN = 1;
+"60
+[; ;comi2c.c: 60:     SSPCON2bits.RCEN = 1;
 [e = . . _SSPCON2bits 0 3 -> -> 1 `i `uc ]
-"62
-[; ;comi2c.c: 62:     while(PIR1bits.SSPIF == 0);
+"61
+[; ;comi2c.c: 61:     while(PIR1bits.SSPIF == 0);
 [e $U 393  ]
 [e :U 394 ]
 [e :U 393 ]
 [e $ == -> . . _PIR1bits 0 3 `i -> 0 `i 394  ]
 [e :U 395 ]
-"63
-[; ;comi2c.c: 63:     return SSPBUF;
+"62
+[; ;comi2c.c: 62:     return SSPBUF;
 [e ) -> _SSPBUF `uc ]
 [e $UE 392  ]
-"64
-[; ;comi2c.c: 64: };
+"63
+[; ;comi2c.c: 63: };
 [e :UE 392 ]
 }

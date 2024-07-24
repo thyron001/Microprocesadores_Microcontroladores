@@ -6,7 +6,6 @@
 // Funciones para la comunicacion I2C    
 
 void I2C_Init(void){
-   
     
     SSPSTATbits.SMP = 1; // 100Kbps
     SSPSTATbits.CKE = 0; // Habilita las entradas específicas del SMBus.
@@ -18,7 +17,7 @@ void I2C_Init(void){
     SSPCON2 = 0x00;  // Revisar estos registros 
     
     SSPADD = 29;// Fosc/4/BitRate - 1  
-
+    
 };
 
 void I2C_Start(void){

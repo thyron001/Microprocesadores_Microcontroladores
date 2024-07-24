@@ -6416,40 +6416,145 @@ void LCD_Data(unsigned char data);
 
 
 
-char t_i[] = "121020";
-char date[] = "100000";
+char t_in[] = "121010";
+char date[] = "180000";
 uint8_t hours, minutes, seconds;
 uint8_t day, month, year;
 
+void tiempo_bcd(void);
+void write_time(void);
+
+void read_time(void);
+void hora_pantalla(void);
+
+void fecha_pantalla(void);
+void tiempo_bcd(void);
+void fecha_bcd(void);
+
+void write_date(void);
+void read_date(void);
+
+volatile int pantalla_actual = 0;
 
 
 
 
-void read_time(void){
 
-    I2C_Start();
-    I2C_Tx(0xD0);
-    I2C_Tx(0x00);
-    I2C_Restart();
-
-    I2C_Tx(0xD1);
-    I2C_Ack();
-    seconds = I2C_Rx();
-    I2C_Ack();
-    minutes = I2C_Rx();
-    I2C_Ack();
-    hours = I2C_Rx();
-    I2C_Nack();
-    I2C_Stop();
-
-};
+void init(void){
 
 
+
+    UCONbits.USBEN = 0;
+    UCFGbits.UTRDIS = 1;
+
+
+    TRISBbits.RB0 = 1;
+    TRISBbits.RB1 = 1;
+    TRISBbits.RB2 = 1;
+    TRISBbits.RB3 = 1;
+    TRISBbits.RB4 = 1;
+
+
+    TRISD = 0x00;
+
+
+    LATB = 0x00;
+    LATD = 0x00;
+    LATC = 0x00;
+
+}
+
+
+
+
+void main(void) {
+
+
+
+    init();
+
+
+
+    I2C_Init();
+    LCD_init();
+
+
+   _delay((unsigned long)((100)*(48000000/4000.0)));
+
+
+
+    limpiar();
+
+    tiempo_bcd();
+    write_time();
+
+    while (1) {
+
+        if(PORTCbits.RC6==0){
+            pantalla_actual = !pantalla_actual;
+        };
+
+
+        if (pantalla_actual == 0) {
+            mostrar_mensaje("Hora:");
+            read_time();
+            hora_pantalla();
+
+            LATDbits.LD1 = 0;
+            txbits(0xC0, 1, 1);
+            LATDbits.LD1 = 1;
+            mostrar_mensaje("Fecha:");
+            read_date();
+            fecha_pantalla();
+
+            _delay((unsigned long)((500)*(48000000/4000.0)));
+            limpiar();
+        } else {
+            mostrar_mensaje("Alarma:");
+            _delay((unsigned long)((500)*(48000000/4000.0)));
+            limpiar();
+        }
+    }
+    return;
+
+}
+
+void fecha_pantalla(void){
+
+    LCD_Data((day>>4)+0x30);
+    LCD_Data((day & 0x0F)+0x30);
+    LCD_Data('/');
+    LCD_Data((month>>4)+0x30);
+    LCD_Data((month & 0x0F)+0x30);
+    LCD_Data('/');
+    LCD_Data((year>>4)+0x30);
+    LCD_Data((year & 0x0F)+0x30);
+}
+
+void tiempo_bcd(void){
+
+
+    for(uint8_t i=0; i<7; i++){
+        t_in[i] &= 0x0F;
+    }
+
+    hours = ((t_in[0]<<4)+ t_in[1]);
+    minutes = ((t_in[2]<<4)+ t_in[3]);
+    seconds = ((t_in[4]<<4)+ t_in[5]);
+}
+
+void fecha_bcd(void){
+
+    for(uint8_t i=0; i<7; i++){
+        date[i] &= 0x0F;
+    }
+
+    day = ((date[0]<<4)+ date[1]);
+    month = ((date[2]<<4)+ date[3]);
+    year = ((date[4]<<4)+ date[5]);
+}
 
 void write_time(void){
-    hours = ((t_i[0] & 0x0F) << 4) + (t_i[1] & 0x0F);
-    minutes = ((t_i[2] & 0x0F) << 4) + (t_i[3] & 0x0F);
-    seconds = ((t_i[4] & 0x0F) << 4) + (t_i[5] & 0x0F);
 
     I2C_Start();
     I2C_Tx(0xD0);
@@ -6460,9 +6565,38 @@ void write_time(void){
     I2C_Ack();
     I2C_Stop();
 
-};
+}
 
 
+void read_time(void){
+
+    I2C_Start();
+    I2C_Tx(0xD0);
+    I2C_Tx(0x00);
+    I2C_Restart();
+
+    I2C_Tx(0xD1);
+    seconds = I2C_Rx();
+    I2C_Ack();
+    minutes = I2C_Rx();
+    I2C_Ack();
+    hours = I2C_Rx();
+    I2C_Nack();
+    I2C_Stop();
+
+}
+
+
+void hora_pantalla(void){
+    LCD_Data((hours>>4)+0x30);
+    LCD_Data((hours & 0x0F)+0x30);
+    LCD_Data(':');
+    LCD_Data((minutes>>4)+0x30);
+    LCD_Data((minutes & 0x0F)+0x30);
+    LCD_Data(':');
+    LCD_Data((seconds>>4)+0x30);
+    LCD_Data((seconds & 0x0F)+0x30);
+}
 
 void read_date(void){
 
@@ -6486,83 +6620,17 @@ void read_date(void){
     I2C_Nack();
     I2C_Stop();
 
-};
+}
 
 void write_date(void){
-    day = ((date[0] & 0x0F) << 4) + (date[1] & 0x0F);
-    month = ((date[2] & 0x0F) << 4) + (date[3] & 0x0F);
-    year = ((date[4] & 0x0F) << 4) + (date[5] & 0x0F);
 
     I2C_Start();
     I2C_Tx(0xD0);
-    I2C_Ack();
     I2C_Tx(0x04);
     I2C_Tx(day);
-    I2C_Ack();
     I2C_Tx(month);
-    I2C_Ack();
     I2C_Tx(year);
-    I2C_Ack();
+
     I2C_Stop();
 
-};
-
-
-
-
-void main(void) {
-
-
-
-
-
-    UCONbits.USBEN = 0;
-    UCFGbits.UTRDIS = 1;
-
-
-    TRISBbits.RB0 = 1;
-    TRISBbits.RB1 = 1;
-    TRISBbits.RB2 = 1;
-    TRISBbits.RB3 = 1;
-    TRISBbits.RB4 = 1;
-
-
-    TRISD = 0x00;
-
-
-    LATD = 0x00;
-    LATC = 0x00;
-
-
-
-
-
-    I2C_Init();
-    LCD_init();
-
-    write_time();
-
-    LATDbits.LD1=0;
-    txbits(0x0C, 1, 1);
-    LATDbits.LD1=1;
-
-    limpiar();
-    _delay((unsigned long)((100)*(48000000/4000.0)));
-
-    mostrar_mensaje(" Hola  perrasos ");
-    _delay((unsigned long)((1000)*(48000000/4000.0)));
-    limpiar();
-    LATDbits.LD1=1;
-
-    while(1){
-
-        read_time();
-        mostrar_mensaje((hours>>4)+0x30);
-        mostrar_mensaje((hours & 0x0F)+0x30);
-        _delay((unsigned long)((100)*(48000000/4000.0)));
-
-
-
-    };
-
-};
+}

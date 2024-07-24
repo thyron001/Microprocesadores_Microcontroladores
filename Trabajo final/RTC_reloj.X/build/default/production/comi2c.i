@@ -5664,7 +5664,6 @@ void I2C_Tx(char data);
 
 void I2C_Init(void){
 
-
     SSPSTATbits.SMP = 1;
     SSPSTATbits.CKE = 0;
 
